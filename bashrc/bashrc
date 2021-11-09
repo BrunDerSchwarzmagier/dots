@@ -1,0 +1,76 @@
+# Sample .bashrc for SuSE Linux
+# Copyright (c) SuSE GmbH Nuernberg
+
+# There are 3 different types of shells in bash: the login shell, normal shell
+# and interactive shell. Login shells read ~/.profile and interactive shells
+# read ~/.bashrc; in our setup, /etc/profile sources ~/.bashrc - thus all
+# settings made here will also take effect in a login shell.
+#
+# NOTE: It is recommended to make language settings in ~/.profile rather than
+# here, since multilingual X sessions would not work properly if LANG is over-
+# ridden in every subshell.
+
+# Some applications read the EDITOR variable to determine your favourite text
+# editor. So uncomment the line below and enter the editor of your choice :-)
+#export EDITOR=/usr/bin/vim
+#export EDITOR=/usr/bin/mcedit
+
+# For some news readers it makes sense to specify the NEWSSERVER variable here
+#export NEWSSERVER=your.news.server
+
+# If you want to use a Palm device with Linux, uncomment the two lines below.
+# For some (older) Palm Pilots, you might need to set a lower baud rate
+# e.g. 57600 or 38400; lowest is 9600 (very slow!)
+#
+#export PILOTPORT=/dev/pilot
+#export PILOTRATE=115200
+
+# set default PATH
+export PATH=$HOME/.local/bin:$HOME/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin
+
+# python
+export PYTHONPATH=''
+export PYTHONHOME=/usr
+
+# qt
+export LD_LIBRARY_PATH=/usr/lib/qt5/plugins/platforms
+export QT_QPA_PLATFORM_PLUGIN_PATH=/usr/lib/qt5/plugins
+
+# aliases and code-specific paths
+load_rc() {
+  bashd=~/.bashrc.d
+  test -s $bashd/$1.rc && . $bashd/$1.rc || true
+}
+load_rc alias
+load_rc pfetch
+	
+# set a fancy prompt
+ps_fore="\[\e[1;38;5;4m\]"
+ps_back="\[\e[1;38;5;0m\]"
+ps_lite="\[\e[1;38;5;6m\]"
+function in_git_repo_branch {
+  # if there are uncommitted changes, include an asterisk (*) character
+  local star=$(if [ -n "$(git status -s)" ]; then echo '*'; fi)
+  local stat_orng="\[\e[1;38;2;208;135;112m\]"
+  local stat_yllw="\[\e[1;38;5;3m\]"
+  local stat_colr=$(if [ -n "$(git status -s)" ]; then echo $stat_orng; else echo $ps_fore; fi)
+  ps_git_branch="${ps_back}(${stat_colr}$(git rev-parse --abbrev-ref HEAD)$stat_yllw$star${ps_back})"
+}
+
+export CLICOLOR=1
+export LSCOLORS=gxBxhxDxfxhxhxhxhxcxcx
+function set_ps1 {
+  if [ -z "$(git rev-parse 2>&1)" ]
+    then
+      in_git_repo_branch
+      export PS1="${ps_back}[${ps_fore}\u@\h:\W${ps_back}]$ps_git_branch${ps_lite}μ \[\e[0m\]"
+    else
+      export PS1="${ps_back}[${ps_fore}\u@\h:\W${ps_back}]${ps_lite}μ \[\e[0m\]"
+  fi
+}
+
+PROMPT_COMMAND='set_ps1'
+#export PS1='\[\e[1;38;5;4m\]\W\[\e[1;0m\]π '
+
+#pfetch
+

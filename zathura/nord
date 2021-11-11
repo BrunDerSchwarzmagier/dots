@@ -1,15 +1,20 @@
 set recolor
-set recolor-lightcolor \#2e3440
+set recolor-lightcolor \#282a36
 set recolor-keephue
-set default-bg \#2e3440
+set default-bg \#282a36
+set inputbar-bg \#81a1c1
+set inputbar-fg \#282a36
+set highlight-color \#5e81ac
+set highlight-active-color \#8fbcbb
+set highlight-transparency 0.5
 set guioptions ""
 set adjust-open "best-fit"
 set scroll-page-aware "true"
 set sandbox none
 set statusbar-h-padding 0
 set statusbar-v-padding 0
+set selection-clipboard clipboard
 map K zoom in
 map R rotate
 map r reload
 map J zoom out
-set selection-clipboard clipboard

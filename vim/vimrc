@@ -24,5 +24,8 @@ set shiftwidth=4               " Indentation inserts 4 spaces.
 if (has("termguicolors"))
   set termguicolors
 endif
-colorscheme nord
+packadd! dracula
+let g:dracula_colorterm = 0
+colorscheme dracula
+"colorscheme nord
 syntax enable

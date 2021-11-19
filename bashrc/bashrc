@@ -22,9 +22,13 @@ load_rc alias
 load_rc pfetch
 	
 # set a fancy prompt
-ps_fore="\[\e[1;38;5;4m\]"
+#ps_name="\[\e[1;38;5;4m\]" # Nord
+#ps_dire="\[\e[1;38;5;4m\]" # Nord
+ps_name="\[\e[1;38;2;98;114;164m\]" # Drac
+ps_dire="\[\e[1;38;2;98;114;164m\]" # Drac
 ps_back="\[\e[1;38;5;0m\]"
-ps_lite="\[\e[1;38;5;6m\]"
+#ps_prmt="\[\e[1;38;5;6m\]" # Nord
+ps_prmt="\[\e[1;38;5;5m\]" # Drac
 function in_git_repo_branch {
   # if there are uncommitted changes, include an asterisk (*) character
   local star=$(if [ -n "$(git status -s)" ]; then echo '*'; fi)
@@ -32,7 +36,7 @@ function in_git_repo_branch {
   #local stat_orng="\[\e[2;38;2;254;128;25m\]"  # Gruv
   local stat_orng="\[\e[2;38;2;255;184;108m\]" # Drac
   local stat_yllw="\[\e[1;38;5;3m\]"
-  local stat_colr=$(if [ -n "$(git status -s)" ]; then echo $stat_orng; else echo $ps_fore; fi)
+  local stat_colr=$(if [ -n "$(git status -s)" ]; then echo $stat_orng; else echo $ps_name; fi)
   ps_git_branch="${ps_back}(${stat_colr}$(git rev-parse --abbrev-ref HEAD)$stat_yllw$star${ps_back})"
 }
 
@@ -42,12 +46,11 @@ function set_ps1 {
   if [ -z "$(git rev-parse 2>&1)" ]
     then
       in_git_repo_branch
-      export PS1="${ps_back}[${ps_fore}\u@\h:\W${ps_back}]$ps_git_branch${ps_lite}μ \[\e[0m\]"
+      export PS1="${ps_back}[${ps_name}\u@\h:${ps_dire}\W${ps_back}]$ps_git_branch${ps_prmt}μ \[\e[0m\]"
     else
-      export PS1="${ps_back}[${ps_fore}\u@\h:\W${ps_back}]${ps_lite}μ \[\e[0m\]"
+      export PS1="${ps_back}[${ps_name}\u@\h:${ps_dire}\W${ps_back}]${ps_prmt}μ \[\e[0m\]"
   fi
 }
 
 PROMPT_COMMAND='set_ps1'
-
 

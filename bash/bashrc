@@ -1,0 +1,56 @@
+# set default PATH
+export PATH=$HOME/.local/bin:$HOME/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin
+
+# python
+export PYTHONPATH=''
+export PYTHONHOME=/usr
+
+# openmpi
+#export PATH=/usr/lib64/mpi/gcc/openmpi2/bin:$PATH
+#export LD_LIBRARY_PATH=/usr/lib64/mpi/gcc/openmpi2/lib64
+
+# qt
+export LD_LIBRARY_PATH=/usr/lib/qt5/plugins/platforms
+export QT_QPA_PLATFORM_PLUGIN_PATH=/usr/lib/qt5/plugins
+
+# aliases and code-specific paths
+load_rc() {
+  bashd=~/.bashrc.d
+  test -s $bashd/$1.rc && . $bashd/$1.rc || true
+}
+load_rc alias
+load_rc pfetch
+	
+# set a fancy prompt
+#ps_name="\[\e[1;38;5;4m\]" # Nord
+#ps_dire="\[\e[1;38;5;4m\]" # Nord
+ps_name="\[\e[1;38;2;98;114;164m\]" # Drac
+ps_dire="\[\e[1;38;2;98;114;164m\]" # Drac
+ps_back="\[\e[1;38;5;0m\]"
+#ps_prmt="\[\e[1;38;5;6m\]" # Nord
+ps_prmt="\[\e[1;38;5;5m\]" # Drac
+function in_git_repo_branch {
+  # if there are uncommitted changes, include an asterisk (*) character
+  local star=$(if [ -n "$(git status -s)" ]; then echo '*'; fi)
+  #local stat_orng="\[\e[1;38;2;208;135;112m\]" # Nord
+  #local stat_orng="\[\e[2;38;2;254;128;25m\]"  # Gruv
+  local stat_orng="\[\e[2;38;2;255;184;108m\]" # Drac
+  local stat_yllw="\[\e[1;38;5;3m\]"
+  local stat_colr=$(if [ -n "$(git status -s)" ]; then echo $stat_orng; else echo $ps_name; fi)
+  ps_git_branch="${ps_back}(${stat_colr}$(git rev-parse --abbrev-ref HEAD)$stat_yllw$star${ps_back})"
+}
+
+export CLICOLOR=1
+export LSCOLORS=gxBxhxDxfxhxhxhxhxcxcx
+function set_ps1 {
+  if [ -z "$(git rev-parse 2>&1)" ]
+    then
+      in_git_repo_branch
+      export PS1="${ps_back}[${ps_name}\u@\h:${ps_dire}\W${ps_back}]$ps_git_branch${ps_prmt}μ \[\e[0m\]"
+    else
+      export PS1="${ps_back}[${ps_name}\u@\h:${ps_dire}\W${ps_back}]${ps_prmt}μ \[\e[0m\]"
+  fi
+}
+
+PROMPT_COMMAND='set_ps1'
+

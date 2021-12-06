@@ -1,0 +1,26 @@
+################################################################################
+## ~/.inputrc
+##
+## Control the behaviour of the readline library used e.g.
+## by the bash in the interactive mode for line editing.
+##
+################################################################################
+
+$include /etc/inputrc
+
+# Search command history
+"\C-p":history-search-backward
+"\C-n":history-search-forward
+
+# Enable completion coloring
+set colored-completion-prefix on
+set colored-stats on
+# Ignore case when completing
+set completion-ignore-case on
+# Automatically add slash to the end of symlinked directories when completing
+set mark-symlinked-directories on
+# Immediately display completion matches
+set show-all-if-ambiguous on
+set show-all-if-unmodified on
+# Display character denoting file type at end of completions
+set visible-stats on

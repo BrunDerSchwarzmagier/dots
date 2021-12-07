@@ -1,4 +1,7 @@
 # convenient aliases
+alias ls='ls -h --color --group-directories-first'
+alias ll='ls -l'
+alias la='ll -A'
 alias ht='htop'
 alias tf='tail -F'
 alias startx='startx ~/.xinitrc'

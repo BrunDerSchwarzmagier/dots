@@ -9,6 +9,9 @@ export PYTHONHOME=/usr
 #export PATH=/usr/lib64/mpi/gcc/openmpi2/bin:$PATH
 #export LD_LIBRARY_PATH=/usr/lib64/mpi/gcc/openmpi2/lib64
 
+# qt
+export QT_STYLE_OVERRIDE=gtk2
+
 # aliases and code-specific paths
 load_rc() {
   bashd=~/.bashrc.d

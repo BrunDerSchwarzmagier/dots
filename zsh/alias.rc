@@ -1,0 +1,48 @@
+# convenient aliases
+alias ls='ls -h --color --group-directories-first'
+alias ll='ls -l'
+alias la='ll -A'
+alias ht='htop'
+alias tf='tail -F'
+alias pa='/opt/paraview/bin/paraview'
+alias startx='startx ~/.xinitrc'
+alias zypper-rm-unneeded="zypper -q pa --unneeded | awk '{ print $5 }' | grep -v Name | xargs sudo zypper rm"
+
+# package manager functions
+whyfile() {
+  package=$(rpm -qf $1 --qf "%{NAME}")
+  ret=$?
+  echo -e "\nPackage: $package\n"
+  (( $ret == 0)) || return
+  zypper if $package
+  whypkg $package
+}
+
+whycmd() {
+  file=$(which $1)
+  (($? == 0)) || return
+  whyfile $file
+}
+
+whypkg() {
+   if zypper pa --orphaned | grep "| $1 " > /dev/null; then
+      echo "Package $1 is orphaned"
+      return 
+   fi
+
+   zargs="zypper se -i -x -v" 
+
+   $zargs --requires --recommends --suggests $1 || \
+   $zargs --requires-pkg $1 || \
+   $zargs --recommends-pkg $1 || \
+   $zargs --suggests-pkg $1
+}
+
+pkgchg() {
+  rpm -q --changelog $1 | less
+}
+
+# rsync function to backup home to hdd
+rsyncb() {
+  sudo rsync -avzP --rsync-path="mkdir -p $2/$1 && rsync" $HOME/$1/ $2/$1
+}

@@ -1,0 +1,63 @@
+# zsh command history
+HISTFILE=~/.zsh_history
+HISTSIZE=10000
+SAVEHIST=10000
+setopt appendhistory
+
+# set default PATH
+export PATH=$HOME/.local/bin:$HOME/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin
+
+# python
+export PYTHONPATH=''
+export PYTHONHOME=/usr
+
+# openmpi
+#export PATH=/usr/lib64/mpi/gcc/openmpi2/bin:$PATH
+#export LD_LIBRARY_PATH=/usr/lib64/mpi/gcc/openmpi2/lib64
+
+# qt
+export QT_STYLE_OVERRIDE=gtk2
+
+# aliases and code-specific paths
+load_rc() {
+  zshd=~/.zshrc.d
+  test -s $zshd/$1.rc && . $zshd/$1.rc || true
+}
+load_rc alias
+load_rc pfetch
+	
+# set a fancy prompt
+ps_dire="#6272a4"
+ps_back="#44475a"
+ps_fore="#f8f8f2"
+ps_prmt="#ff79c6"
+ps_yllw="#f1fa8c"
+ps_orng="#ffb86c"
+autoload -U colors && colors
+autoload -Uz vcs_info
+zstyle ':vcs_info:git*' formats '%b'
+zstyle ':vcs_info:*' enable git
+setopt prompt_subst
+
+ps_git_dirty() {
+    # Check if it's dirty
+    command git diff --quiet --ignore-submodules HEAD &>/dev/null; [ $? -eq 1 ] && echo "%F{$ps_yllw}%b\uE0A0%B%F{$ps_orng}" || echo "%b\uE0A0%B"
+}
+
+ps_git_repo() {
+    # Check if we're in a git repo
+    command git rev-parse --is-inside-work-tree &>/dev/null || return
+    echo "(%F{$ps_dire}`ps_git_dirty` ${vcs_info_msg_0_}%F{$ps_back})"
+}
+
+precmd() {
+    # Get version control info before we start outputting stuff
+    vcs_info
+    PROMPT='%B%F{$ps_back}[%F{$ps_dire}%n@%M:%1~%F{$ps_back}]$(ps_git_repo)%F{$ps_prmt}μ%b %f'
+}
+
+# syntax highlighting
+(( ${+ZSH_HIGHLIGHT_STYLES} )) || typeset -A ZSH_HIGHLIGHT_STYLES
+ZSH_HIGHLIGHT_STYLES[path]=none
+ZSH_HIGHLIGHT_STYLES[path_prefix]=none
+source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.plugin.zsh

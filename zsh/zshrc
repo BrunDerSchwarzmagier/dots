@@ -25,6 +25,10 @@ load_rc() {
 }
 load_rc alias
 load_rc pfetch
+
+# key bindings
+bindkey "^[[1;3C" forward-word
+bindkey "^[[1;3D" backward-word
 	
 # set a fancy prompt
 ps_dire="#6272a4"

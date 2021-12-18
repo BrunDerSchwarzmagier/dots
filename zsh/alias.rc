@@ -4,7 +4,7 @@ alias ll='ls -l'
 alias la='ll -A'
 alias ht='htop'
 alias tf='tail -F'
-alias pa='/opt/paraview/bin/paraview'
+alias diff='diff --color'
 alias startx='startx ~/.xinitrc'
 alias zypper-rm-unneeded="zypper -q pa --unneeded | awk '{ print $5 }' | grep -v Name | xargs sudo zypper rm"
 

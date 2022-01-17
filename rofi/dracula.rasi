@@ -99,6 +99,7 @@ element-icon {
     cursor: inherit;
 }
 window {
+    width: 512;
     padding: 4;
     border: 4;
     border-radius: 6;

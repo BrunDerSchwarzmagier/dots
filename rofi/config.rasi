@@ -1,4 +1,4 @@
 configuration {
 }
-@theme "dracula"
+@theme "catppuccin"
 
